@@ -11,4 +11,7 @@ public interface OrderService {
     String createOrder(Orders orders);
 
 
+    Orders getOrderById(String id);
+
+    List<Orders> GetorderdetailsByUserId(String id);
 }

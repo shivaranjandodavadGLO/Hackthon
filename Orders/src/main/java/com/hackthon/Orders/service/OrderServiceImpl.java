@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -21,6 +22,14 @@ public class OrderServiceImpl implements OrderService {
     public List<Orders> Getorderdetails() {
         logger.info(OrderConstants.FETCHING_ORDERS);
         List<Orders> orders = ordersRepository.findAll();
+        logger.info(OrderConstants.TOTAL_ORDERS_FETCHED, orders.size());
+        return orders;
+    }
+
+    @Override
+    public List<Orders> GetorderdetailsByUserId(String orderId) {
+        logger.info(OrderConstants.FETCHING_ORDERS);
+        List<Orders> orders = ordersRepository.findByUserId(orderId);
         logger.info(OrderConstants.TOTAL_ORDERS_FETCHED, orders.size());
         return orders;
     }
@@ -57,6 +66,15 @@ public class OrderServiceImpl implements OrderService {
 
         return OrderConstants.ORDER_CREATED + lastOrder.getOrderId();
     }
+
+    @Override
+    public Orders getOrderById(String id) {
+        Optional<Orders> order = ordersRepository.findById(id);
+        return order.orElseThrow(() -> new ExceptionDetails(OrderConstants.ORDER_NOT_WITH_ID + id));
+    }
+
+
+
 
 
 }

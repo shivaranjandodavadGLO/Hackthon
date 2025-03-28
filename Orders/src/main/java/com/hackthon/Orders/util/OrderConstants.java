@@ -15,4 +15,5 @@ public interface OrderConstants {
 
     String ORDER_ALREADY_EXISTS = "Order already exists with ID: ";
     String RECEIVED_REQUEST = "Received request to create order: {}";
+    String ORDER_NOT_WITH_ID = "Order not found with ID: ";
 }

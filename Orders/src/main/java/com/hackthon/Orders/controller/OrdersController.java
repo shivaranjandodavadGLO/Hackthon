@@ -8,10 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,18 +18,28 @@ public class OrdersController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping("/hello")
-    public String getHello() {
-        log.info(OrderConstants.HELLO);
-        return OrderConstants.HELLO;
-    }
 
     @GetMapping("/api/orders")
-    public List<Orders> getOrderDetails() {
+    public ResponseEntity<List<Orders>> getOrderDetails() {
         log.info(OrderConstants.FETCHING_ORDERS);
         List<Orders> orders = orderService.Getorderdetails();
         log.info(OrderConstants.TOTAL_ORDERS_FETCHED, orders.size());
-        return orderService.Getorderdetails();
+        return new ResponseEntity<>(orderService.Getorderdetails(), HttpStatus.OK);
+    }
+
+    @GetMapping("/api/orders/{id}")
+    public ResponseEntity<Orders> getOrderDetailsByOrderId(@PathVariable String id) {
+        log.info("Fetching order with ID: {}", id);
+        Orders order = orderService.getOrderById(id);
+        return new ResponseEntity<>(orderService.getOrderById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/api/orders/user/{userId}")
+    public ResponseEntity<List<Orders>> getOrderDetailsByUserID(@PathVariable String userId) {
+        log.info(OrderConstants.FETCHING_ORDERS);
+        List<Orders> orders = orderService.Getorderdetails();
+        log.info(OrderConstants.TOTAL_ORDERS_FETCHED, orders.size());
+        return new ResponseEntity<>(orderService.GetorderdetailsByUserId(userId), HttpStatus.OK);
     }
 
     @PostMapping("/api/orders/create")
