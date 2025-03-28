@@ -20,13 +20,8 @@ public class OrdersController {
     private OrderService orderService;
 
 
-    @GetMapping("/api/orders")
-    public ResponseEntity<List<Orders>> getOrderDetails() {
-        log.info(OrderConstants.FETCHING_ORDERS);
-        List<Orders> orders = orderService.Getorderdetails();
-        log.info(OrderConstants.TOTAL_ORDERS_FETCHED, orders.size());
-        return new ResponseEntity<>(orderService.Getorderdetails(), HttpStatus.OK);
-    }
+    @Autowired
+    private EmailClient emailClient;
 
     @GetMapping("/api/orders/{id}")
     public ResponseEntity<Orders> getOrderDetailsByOrderId(@PathVariable String id) {
@@ -43,11 +38,27 @@ public class OrdersController {
         return new ResponseEntity<>(orderService.GetorderdetailsByUserId(userId), HttpStatus.OK);
     }
 
+    @GetMapping("/api/orders")
+    public ResponseEntity<List<Orders>> getOrderDetails() {
+        log.info(OrderConstants.FETCHING_ORDERS);
+        List<Orders> orders = orderService.Getorderdetails();
+        log.info(OrderConstants.TOTAL_ORDERS_FETCHED, orders.size());
+        placeOrder();
+        return new ResponseEntity<>(orderService.Getorderdetails(), HttpStatus.OK);
+    }
+
     @PostMapping("/api/orders/create")
     public ResponseEntity<String> createOrder(@RequestBody Orders orders) {
         log.info(OrderConstants.ORDER_RECEIVED, orders);
         String response = orderService.createOrder(orders);
         log.info(OrderConstants.ORDER_CREATED_RESPONSE, response);
+//        placeOrder(orders);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    public String placeOrder() {
+        emailClient.sendEmailOrder();
+
+        return "Order placed successfully! Confirmation email sent.";
     }
 }
