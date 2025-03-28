@@ -2,10 +2,12 @@ package com.hackathon.Products.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -21,6 +23,7 @@ public class Products {
     private Double price;
     private int stockQuantity;
     private String category;
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     public Products(String productId, String name, String description, Double price, int stockQuantity, String category, LocalDateTime createdAt) {
@@ -33,6 +36,10 @@ public class Products {
         this.createdAt = createdAt;
     }
 
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
     public Products() {
     }
 

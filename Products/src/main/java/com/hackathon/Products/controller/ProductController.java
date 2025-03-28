@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin("*")
 public class ProductController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
