@@ -18,7 +18,6 @@ function loadOrders() {
 
                 row.innerHTML = `
                     <td>${order.orderId}</td>
-                    <td>${order.userId}</td>
                     <td>$${order.totalAmount.toFixed(2)}</td>
                     <td>
                         ${order.paymentStatus}
@@ -42,7 +41,6 @@ function fetchOrderDetailsById(orderId) {
         .then(response => response.json())
         .then(order => {
             document.getElementById("modalOrderId").innerText = order.orderId;
-            document.getElementById("modalUserId").innerText = order.userId;
             document.getElementById("modalTotalAmount").innerText = order.totalAmount.toFixed(2);
             document.getElementById("modalPaymentStatus").innerText = order.paymentStatus;
             document.getElementById("modalCreatedAt").innerText = new Date(order.created_at).toLocaleString();
@@ -64,3 +62,13 @@ function openModal() {
 function closeModal() {
     document.getElementById("orderModal").style.display = "none";
 }
+document.addEventListener("DOMContentLoaded", function () {
+    const orderModal = document.getElementById("orderModal");
+
+    // Ensure modal is hidden on page load
+    orderModal.style.display = "none";
+
+    function closeModal() {
+        orderModal.style.display = "none";
+    }
+});

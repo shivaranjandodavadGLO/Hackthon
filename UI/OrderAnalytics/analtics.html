@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Order Analytics</title>
+    <link href="analytics.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+        <a class="tab" href="../ORDERS/Order.html">📦 Order History</a>
+        <a class="tab active" href="analytics.html">📊 Order Analytics</a>
+    </div>
+
+    <!-- Header with Logo -->
+    <div class="header">
+        <img alt="Company Logo" class="logo" src="logo.svg">
+        <h1>Order Analytics Dashboard</h1>
+    </div>
+
+    <!-- Analytics Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total Orders</h3>
+            <p id="totalOrders">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Total Revenue</h3>
+            <p>$<span id="totalRevenue">0.00</span></p>
+        </div>
+        <div class="stat-card">
+            <h3>Pending Orders</h3>
+            <p id="pendingOrders">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Paid Orders</h3>
+            <p id="paidOrders">0</p>
+        </div>
+    </div>
+
+    <!-- Order Trends Chart -->
+    <div class="chart-container">
+        <canvas id="orderChart"></canvas>
+    </div>
+</div>
+
+<script src="analytics.js"></script>
+
+</body>
+</html>

@@ -9,6 +9,12 @@
 <body>
 
 <div class="container">
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+        <a class="tab active" href="Order.html">📦 Order History</a>
+        <a class="tab" href="../OrderAnalytics/analtics.html">📊 Order Analytics</a>
+    </div>
+
     <!-- Header with Logo -->
     <div class="header">
         <img alt="Company Logo" class="logo" src="logo.svg">
@@ -20,7 +26,6 @@
         <thead>
         <tr>
             <th>Order ID</th>
-            <th>User ID</th>
             <th>Total Amount</th>
             <th>Payment Status</th>
             <th>Created At</th>
@@ -36,9 +41,8 @@
 <div class="modal" id="orderModal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
-        <h2>Order Details</h2>
+        <h2>Order Details ind</h2>
         <p><strong>Order ID:</strong> <span id="modalOrderId"></span></p>
-        <p><strong>User ID:</strong> <span id="modalUserId"></span></p>
         <p><strong>Total Amount:</strong> $<span id="modalTotalAmount"></span></p>
         <p><strong>Payment Status:</strong> <span id="modalPaymentStatus"></span>
             <img class="status-icon" id="modalPaymentIcon">
