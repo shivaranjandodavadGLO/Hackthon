@@ -1,5 +1,6 @@
 package com.hackthon.Orders.controller;
 
+import com.hackthon.Orders.DTO.Products;
 import com.hackthon.Orders.model.Orders;
 import com.hackthon.Orders.service.OrderService;
 import com.hackthon.Orders.util.OrderConstants;
@@ -58,6 +59,14 @@ public class OrdersController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PostMapping("/add")
+    public ResponseEntity<Orders> createProduct(@RequestBody Products product) {
+
+        // Save the product
+
+
+        return ResponseEntity.ok(orderService.createOrderByProductDetails(product));
+    }
 //    public String placeOrder() {
 //        emailClient.sendEmailOrder();
 //

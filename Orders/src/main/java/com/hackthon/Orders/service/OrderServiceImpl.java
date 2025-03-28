@@ -1,16 +1,20 @@
 package com.hackthon.Orders.service;
 
+import com.hackthon.Orders.DTO.Products;
 import com.hackthon.Orders.Exception.ExceptionDetails;
 import com.hackthon.Orders.model.Orders;
 import com.hackthon.Orders.repositery.OrdersRepositery;
 import com.hackthon.Orders.util.OrderConstants;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -35,31 +39,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
+
+    public Orders createOrderByProductDetails(Products products) {
+        Orders orders = new Orders("101012", "", products.getPrice(), "Passed", LocalDateTime.now());
+        createOrder(orders);
+        Orders savedOrder = ordersRepository.save(orders); // Save and return saved instance
+        logger.info(OrderConstants.ORDER_CREATED + savedOrder.getOrderId());
+
+        return savedOrder; // ✅ Return the saved order
+    }
+
+
+    @Override
     public String createOrder(Orders orders) {
         logger.info(OrderConstants.RECEIVED_REQUEST, orders);
 
-        // Check if the order object is null
-        if (orders == null) {
-            logger.error(OrderConstants.ORDER_CANNOT_NULL);
-            throw new ExceptionDetails(OrderConstants.ORDER_CANNOT_NULL);
-        }
-
-        // Check if the order ID already exists
-        if (orders.getOrderId() != null && ordersRepository.existsById(orders.getOrderId())) {
-            logger.warn(OrderConstants.ORDER_WITH_ID + orders.getOrderId() + OrderConstants.ALLREADY_EXIST);
-            throw new ExceptionDetails(OrderConstants.ORDER_WITH_ID + orders.getOrderId() + OrderConstants.ALLREADY_EXIST);
-        }
-
-        // Validate required fields
-        if (orders.getTotalAmount() == null || orders.getTotalAmount() <= 0) {
-            logger.error(OrderConstants.PRICE_GREATERTHAN_ZERO);
-            throw new ExceptionDetails(OrderConstants.PRICE_GREATERTHAN_ZERO);
-        }
-        if (orders.getUserId() == null) {
-            logger.error(OrderConstants.USER_ID_CANNOT_NULL);
-            throw new ExceptionDetails(OrderConstants.USER_ID_CANNOT_NULL);
-        }
-
+        String orderId = "ORD-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        orders.setOrderId(orderId);
         // Save order
         Orders lastOrder = ordersRepository.save(orders);
         logger.info(OrderConstants.ORDER_CREATED + lastOrder.getOrderId());
@@ -72,9 +69,5 @@ public class OrderServiceImpl implements OrderService {
         Optional<Orders> order = ordersRepository.findById(id);
         return order.orElseThrow(() -> new ExceptionDetails(OrderConstants.ORDER_NOT_WITH_ID + id));
     }
-
-
-
-
 
 }
