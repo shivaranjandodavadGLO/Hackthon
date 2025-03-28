@@ -10,40 +10,44 @@
 
 <div class="container">
     <!-- Navigation Tabs -->
-    <div class="tabs">
-        <a class="tab active" href="Order.html">📦 Order History</a>
+    <nav class="tabs">
+        <a class="tab" href="../ORDERS/Order.html">🛒 Order Product</a>
+        <a class="tab" href="../PRODUCTS/product.html">💳 Buy</a>
+        <a class="tab active" href="../ORDERS/Order.html">📦 Order History</a>
         <a class="tab" href="../OrderAnalytics/analtics.html">📊 Order Analytics</a>
-    </div>
+    </nav>
 
     <!-- Header with Logo -->
-    <div class="header">
-        <img alt="Company Logo" class="logo" src="logo.svg">
-        <h1>Order Management Dashboard</h1>
-    </div>
+    <!--    <div class="header">-->
+    <!--        <img alt="Company Logo" class="logo" src="logo.svg">-->
+    <!--        <h1>Order Management Dashboard</h1>-->
+    <!--    </div>-->
 
     <!-- Order Table -->
-    <table>
-        <thead>
-        <tr>
-            <th>Order ID</th>
-            <th>Total Amount</th>
-            <th>Payment Status</th>
-            <th>Created At</th>
-        </tr>
-        </thead>
-        <tbody id="orderTableBody">
-        <!-- Orders will be dynamically inserted here -->
-        </tbody>
-    </table>
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Total Amount</th>
+                <th>Payment Status</th>
+                <th>Created At</th>
+            </tr>
+            </thead>
+            <tbody id="orderTableBody">
+            <!-- Orders will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <!-- Order Details Modal -->
 <div class="modal" id="orderModal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
-        <h2>Order Details ind</h2>
+        <h2>Order Details</h2>
         <p><strong>Order ID:</strong> <span id="modalOrderId"></span></p>
-        <p><strong>Total Amount:</strong> $<span id="modalTotalAmount"></span></p>
+        <p><strong>Total Amount:</strong> ₹<span id="modalTotalAmount"></span></p>
         <p><strong>Payment Status:</strong> <span id="modalPaymentStatus"></span>
             <img class="status-icon" id="modalPaymentIcon">
         </p>

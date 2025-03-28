@@ -3,25 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer - Product Selection</title>
+    <title>Customer - Order Product</title>
     <link rel="stylesheet" href="customer.css">
 </head>
 <body>
 
 <div class="container">
-    <h1>Welcome to Our Store</h1>
+    <!-- Navigation Tabs -->
+    <nav class="tabs">
+        <a class="tab active" href="../Customer/customer.html">🛒 Order Product</a>
+        <a class="tab" href="../PRODUCTS/product.html">💳 Buy</a>
+        <a class="tab" href="../ORDERS/Order.html">📦 Order History</a>
+        <a class="tab" href="../OrderAnalytics/analtics.html">📊 Order Analytics</a>
+    </nav>
 
+    <!-- Order Form -->
     <div class="form-container">
-        <h2>Order Your Product</h2>
+        <h2>🛒 Order Your Product</h2>
         <form id="orderForm">
-            <label for="productDropdown">Select Product:</label>
             <select id="productDropdown" onchange="loadProductDetails()">
                 <option value="">-- Select a Product --</option>
             </select>
 
             <input type="text" id="description" placeholder="Description" readonly>
             <input type="text" id="category" placeholder="Category" readonly>
-            <input type="number" id="price" placeholder="Price" readonly>
+            <input id="price" placeholder="Price (₹)" readonly type="number">
 
             <div class="quantity-container">
                 <button type="button" onclick="updateStock(-1)">-</button>
@@ -29,7 +35,7 @@
                 <button type="button" onclick="updateStock(1)">+</button>
             </div>
 
-            <button type="button" onclick="checkout()">Checkout</button>
+            <button id="checkoutBtn" onclick="checkout()" type="button">🛒 Checkout</button>
         </form>
     </div>
 </div>

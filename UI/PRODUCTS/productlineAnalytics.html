@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Product Analytics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f4; }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
+        .card { background: #e9ecef; padding: 20px; margin: 10px 0; border-radius: 8px; }
+        canvas { max-width: 100%; margin-bottom: 20px; }
+        .refresh-btn { display: block; margin: 10px auto; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+    <link href="product.css" rel="stylesheet">
+
+
+    <script>
+        setTimeout(() => { location.reload(); }, 10000);
+        function manualRefresh() { location.reload(); }
+    </script>
+</head>
+<body>
+<div class="container">
+    <nav class="tabs">
+        <a class="tab" href="../ORDERS/Order.html">🛒 Order Product</a>
+        <a class="tab" href="../PRODUCTS/product.html">💳 Buy</a>
+        <a class="tab active" href="../ORDERS/Order.html">📦 Order History</a>
+        <a class="tab" href="../OrderAnalytics/analtics.html">📊 Order Analytics</a>
+        <a class="tab" href="../PRODUCTS/productlineAnalytics.html">📊 Order Analytics</a>
+
+    </nav>
+    <h2>Product Analytics Dashboard</h2>
+    <button class="refresh-btn" onclick="manualRefresh()">Refresh Data</button>
+    <div class="card" id="summary"></div>
+    <canvas id="stockByCategoryChart"></canvas>
+    <canvas id="priceVsStockChart"></canvas>
+    <canvas id="lowStockChart"></canvas>
+    <h3>Low Stock Alerts</h3>
+    <ul id="lowStockList"></ul>
+    <h3>Recent Products</h3>
+    <ul id="recentProducts"></ul>
+</div>
+
+<script>
+    async function loadData() {
+        try {
+            const response = await fetch('http://localhost:8084/api/products');
+            const data = await response.json();
+
+            let totalStock = 0;
+            let totalValue = 0;
+            const stockByCategory = {}, priceVsStock = [], lowStockProducts = [], recentProducts = [];
+
+            data.forEach(product => {
+                totalStock += product.stockQuantity;
+                totalValue += product.price * product.stockQuantity;
+                stockByCategory[product.category] = (stockByCategory[product.category] || 0) + product.stockQuantity;
+                priceVsStock.push({ price: product.price, stock: product.stockQuantity, name: product.name });
+                if (product.stockQuantity < 10) {
+                    lowStockProducts.push(product);
+                }
+                recentProducts.push({ name: product.name, date: product.createdAt, stock: product.stockQuantity });
+            });
+
+            document.getElementById('summary').innerHTML =
+                `<p>Total Stock: ${totalStock}</p>
+                 <p>Total Inventory Value: $${totalValue.toFixed(2)}</p>
+                 <p>Categories: ${Object.keys(stockByCategory).length}</p>`;
+
+            createChart('stockByCategoryChart', 'Stock by Category', Object.keys(stockByCategory), Object.values(stockByCategory));
+            createChart('lowStockChart', 'Low Stock Products', lowStockProducts.map(p => p.name), lowStockProducts.map(p => p.stockQuantity));
+
+            lowStockProducts.forEach(p => {
+                document.getElementById('lowStockList').innerHTML += `<li>${p.name} - Stock: ${p.stockQuantity}</li>`;
+            });
+
+            recentProducts.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5).forEach(p => {
+                document.getElementById('recentProducts').innerHTML += `<li>${p.name} - Stock: ${p.stock} (${p.date})</li>`;
+            });
+
+            createScatterPlot('priceVsStockChart', 'Price vs Stock', priceVsStock);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    }
+
+    function createChart(id, label, labels, data) {
+        new Chart(document.getElementById(id), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{ label, data }]
+            }
+        });
+    }
+
+    function createScatterPlot(id, label, data) {
+        new Chart(document.getElementById(id), {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label,
+                    data: data.map(p => ({ x: p.price, y: p.stock })),
+                    pointBackgroundColor: 'blue'
+                }]
+            },
+            options: {
+                scales: {
+                    x: { title: { display: true, text: 'Price' } },
+                    y: { title: { display: true, text: 'Stock Quantity' } }
+                }
+            }
+        });
+    }
+
+    loadData();
+</script>
+</body>
+</html>
