@@ -43,7 +43,7 @@ public class OrdersController {
         log.info(OrderConstants.FETCHING_ORDERS);
         List<Orders> orders = orderService.Getorderdetails();
         log.info(OrderConstants.TOTAL_ORDERS_FETCHED, orders.size());
-        placeOrder();
+//        placeOrder();
         return new ResponseEntity<>(orderService.Getorderdetails(), HttpStatus.OK);
     }
 
@@ -53,12 +53,14 @@ public class OrdersController {
         String response = orderService.createOrder(orders);
         log.info(OrderConstants.ORDER_CREATED_RESPONSE, response);
 //        placeOrder(orders);
+        emailClient.sendOrderNotification(orders);
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public String placeOrder() {
-        emailClient.sendEmailOrder();
-
-        return "Order placed successfully! Confirmation email sent.";
-    }
+//    public String placeOrder() {
+//        emailClient.sendEmailOrder();
+//
+//        return "Order placed successfully! Confirmation email sent.";
+//    }
 }

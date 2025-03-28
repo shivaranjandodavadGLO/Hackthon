@@ -17,9 +17,9 @@ public class EmailService {
         emailSenderService.SendEmail("shivaranjan.dodavad@gmail.com", "subject", "body");
     }
 
-    public void sendEmailInventoryAdmin() throws Exception {
+    public void sendEmailInventoryAdmin(String orderId) throws Exception {
 //        String subject = "Order Confirmation - " + orderId;
-        String subject = "Order Confirmation -SHIV_ORDER 12344252525";
+        String subject = "Order Confirmation -SHIV_ORDER 12344252525" + orderId;
         // Build the email content
 
         String emailContent = "Thank You for Your Purchase, " + "customerName" + "!\n\n" +
