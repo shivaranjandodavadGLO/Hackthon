@@ -38,7 +38,7 @@ public class EmailController {
 
         // Simulate sending a notification (e.g., email, SMS)
         String notificationMessage = "Order " + order.getOrderId() + " has been received and processed.";
-        emailService.sendEmailInventoryAdmin(order.getOrderId());
+        emailService.sendEmailInventoryAdmin(order);
 
         return new ResponseEntity<>("Notification Sent", HttpStatus.OK);
     }
